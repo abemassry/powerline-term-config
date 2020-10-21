@@ -319,15 +319,17 @@ if ! has('gui_running')
 endif
 
 function GHLink()
-    " get basic info about where we are
-    let branch=systemlist("git status | grep 'On branch' | cut -f3 -d ' '")[0]
-    let lineno=line('.')
-    let file=expand('%')
+  " get basic info about where we are
+  let branch=systemlist("git status | grep 'On branch' | cut -f3 -d ' '")[0]
+  let lineno=line('.')
+  let file=expand('%')
 
-    " get the repo name from a remote
-    " this will look like git@github.com:user/repo.git
-    let remote=systemlist("git remote -v | grep origin | cut -f2 | cut -f1 -d ' '")[0]
-    " get the user/repo.git part
+  " get the repo name from a remote
+  " this will look like git@github.com:user/repo.git
+  let remote=systemlist("git remote -v | grep origin | cut -f2 | cut -f1 -d ' '")[0]
+  let remote=substitute(remote, 'https://', '', '')
+  " get the user/repo.git part
+  if remote =~ ":"
     let org_repo=split(remote, ':')[1]
     " split on / to get the user - user
     let org=split(org_repo, '/')[0]
@@ -335,18 +337,24 @@ function GHLink()
     let repo=split(org_repo, '/')[1]
     " trim off a .git if it exists
     let repo=substitute(repo, '.git', '', '')
-
     " the repo url was in the remote too, between the @ and the :
     let repo_url=split(remote, ':')[0]
     let repo_url=split(repo_url, '@')[1]
+  else
+    let repo_url = "github.com"
+    let org=split(remote, '/')[1]
+    let repo=split(remote, '/')[2]
+    let repo=substitute(repo, '.git', '', '')
+  endif
 
-    " get the folder
-    let path=systemlist("git rev-parse --show-prefix")[0]
+  " the repo url was in the remote too, between the @ and the :
 
-    " construct, copy, and output the url
-    let url='https://'.repo_url.'/'.org.'/'.repo.'/blob/'.branch.'/'.path.file.'#L'.lineno
-    let junk=system("echo ".url." | pbcopy")
-    echom url
+  " get the folder
+  let path=systemlist("git rev-parse --show-prefix")[0]
+
+  " construct, copy, and output the url
+  let url='https://'.repo_url.'/'.org.'/'.repo.'/blob/'.branch.'/'.path.file.'#L'.lineno
+  echom url
 endfunction
 
 command GHlink call GHLink()

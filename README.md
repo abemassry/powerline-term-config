@@ -303,8 +303,9 @@ function Tab4Spaces()
   let g:statText="4Spaces"
 endfunction
 nmap <F5> mz:execute Tab4Spaces()<CR>'z
+
 function TabsOrSpaces()
-        echo g:statText
+  return g:statText
 endfunction
 
 execute Tab2Spaces()
@@ -404,4 +405,25 @@ Configure Plugins
 mkdir ~/.janus
 cd ~/.janus
 git clone https://github.com/Yggdroot/indentLine.git
+```
+
+For tabs vs spaces indicator add the following to: `/usr/lib/python3/dist-packages/powerline/segments/vim/__init__.py`
+```
+@requires_segment_info
+def tabs_indicator(pl, segment_info):
+	return vim.eval('TabsOrSpaces()')
+```
+
+Add the following to: `/usr/share/powerline/config_files/themes/vim/default.json`
+After the paste indicator
+```
+{
+	"function": "tabs_indicator",
+	"priority": 10
+},
+```
+
+Add the follwing to `/usr/share/powerline/config_files/colorschemes/vim/default.json`
+```
+"tabs_indicator":           { "fg": "white", "bg": "gray4", "attrs": ["bold"] },
 ```

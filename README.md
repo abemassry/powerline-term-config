@@ -423,7 +423,8 @@ After the paste indicator
 },
 ```
 
-Add the follwing to `/usr/share/powerline/config_files/colorschemes/vim/default.json`
+Add the following to `/usr/share/powerline/config_files/colorschemes/vim/default.json`
+after the paste indicator section
 ```
 "tabs_indicator":           { "fg": "white", "bg": "gray4", "attrs": ["bold"] },
 ```

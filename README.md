@@ -397,6 +397,8 @@ Add the following to `~/.vimrc.before`
 ```vimscript
 call janus#disable_plugin('vimwiki')
 let g:vim_json_syntax_conceal = 0
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
 ```
 
 Configure Plugins

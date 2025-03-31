@@ -374,7 +374,7 @@ let g:indentLine_char = '¦'
 let g:indentLine_enabled = 1
 " There is a trailing space on the next line like this:
 "set list lcs=tab:\¦\[[:space:]]
-set list lcs=tab:\¦\ 
+set list lcs=tab:\¦\
 set colorcolumn=81
 
 " python-mode
@@ -430,3 +430,317 @@ after the paste indicator section
 ```
 "tabs_indicator":           { "fg": "white", "bg": "gray4", "attrs": ["bold"] },
 ```
+
+# Neovim
+
+Some plugins only work with neovim, both the above vim configuration and neovim can be installed
+at the same time. Neovim will be accessible with the `nvim` command.
+
+## Install Neovim
+Follow the instructions here: https://github.com/neovim/neovim?tab=readme-ov-file#install-from-source
+
+the only change to make is:
+`make -j CMAKE_BUILD_TYPE=RelWithDebInfo`
+
+afterwards follow these instructions: https://github.com/pgosar/CyberNvim
+
+The main config directory will now be `~/.config/nvim`
+
+Most of the user config can be put in here: `~/.config/nvim/lua/user/user_config.lua`
+```lua
+-- use a user/user_config.lua file to provide your own configuration
+
+local M = {}
+
+-- add any null-ls sources you want here
+M.setup_sources = function(b)
+        return {
+                b.code_actions.gitsigns,
+        }
+end
+
+-- add mason sources to auto-install
+M.mason_ensure_installed = {
+        null_ls = {
+                "stylua",
+                "jq",
+        },
+        dap = {
+                "python",
+                "delve",
+        },
+}
+
+-- add servers to be used for auto formatting here
+M.formatting_servers = {
+        ["rust_analyzer"] = { "rust" },
+        ["lua_ls"] = { "lua" },
+        ["null_ls"] = {
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+        },
+}
+
+-- options you put here will override or add on to the default options
+M.options = {
+        opt = {
+                confirm = true,
+        },
+}
+
+-- Set any to false that you want disabled in here.
+-- take a look at the autocommands file in lua/core for more information
+-- Default value is true if left blank
+M.autocommands = {
+        alpha_folding = true,
+        treesitter_folds = true,
+        trailing_whitespace = true,
+        remember_file_state = true,
+        session_saved_notification = true,
+        css_colorizer = true,
+        cmp = true,
+}
+
+-- set to false to disable plugins
+-- Default value is true if left blank
+M.enable_plugins = {
+        -- aerial: Code outline window for skimming and quick navigation
+        -- https://github.com/stevearc/aerial.nvim
+        aerial = true,
+
+        -- alpha: Customizable start screen for Neovim
+        -- https://github.com/goolord/alpha-nvim
+        alpha = true,
+
+        -- autotag: Automatically close and rename HTML/XML tags
+        -- https://github.com/windwp/nvim-ts-autotag
+        autotag = true,
+
+        -- bufferline: Snazzy buffer line for Neovim
+        -- https://github.com/akinsho/bufferline.nvim
+        bufferline = true,
+
+        -- context: Shows the current function context in the command line
+        -- https://github.com/wellle/context.vim
+        context = true,
+
+        -- dressing: Improve the default Neovim UI
+        -- https://github.com/stevearc/dressing.nvim
+        dressing = true,
+
+        -- gitsigns: Git signs in the sign column
+        -- https://github.com/lewis6991/gitsigns.nvim
+        gitsigns = true,
+
+        -- hop: Easy motion-like navigation
+        -- https://github.com/phaazon/hop.nvim
+        hop = true,
+
+        -- img_clip: Paste images from clipboard into Neovim
+        -- https://github.com/ekickx/clipboard-image.nvim
+        img_clip = true,
+
+        -- indent_blankline: Indentation guides for Neovim
+        -- https://github.com/lukas-reineke/indent-blankline.nvim
+        indent_blankline = true,
+
+        -- lsp_zero: Lightweight LSP configuration for Neovim
+        -- https://github.com/VonHeikemen/lsp-zero.nvim
+        lsp_zero = true,
+
+        -- lualine: Fast and easy-to-configure statusline
+        -- https://github.com/nvim-lualine/lualine.nvim
+        lualine = true,
+
+        -- neodev: Neovim setup for init.lua and plugin development
+        -- https://github.com/folke/neodev.nvim
+        neodev = true,
+
+        -- neoscroll: Smooth scrolling for Neovim
+        -- https://github.com/karb94/neoscroll.nvim
+        neoscroll = true,
+
+        -- neotree: File explorer tree for Neovim
+        -- https://github.com/nvim-neo-tree/neo-tree.nvim
+        neotree = true,
+
+        -- session_manager: Session management for Neovim
+        -- https://github.com/Shatur/neovim-session-manager
+        session_manager = true,
+
+        -- noice: Highly experimental plugin that replaces UI components
+        -- https://github.com/folke/noice.nvim
+        noice = true,
+
+        -- null_ls: Use Neovim as a language server to inject LSP diagnostics, code actions, and more
+        -- https://github.com/jose-elias-alvarez/null-ls.nvim
+        null_ls = true,
+
+        -- autopairs: Autopairs for Neovim
+        -- https://github.com/windwp/nvim-autopairs
+        autopairs = true,
+
+        -- cmp: Completion engine for Neovim
+        -- https://github.com/hrsh7th/nvim-cmp
+        cmp = true,
+
+        -- colorizer: Color highlighter for Neovim
+        -- https://github.com/norcalli/nvim-colorizer.lua
+        colorizer = true,
+
+        -- dap: Debug Adapter Protocol client implementation for Neovim
+        -- https://github.com/mfussenegger/nvim-dap
+        dap = true,
+
+        -- notify: Fancy, configurable notification manager for Neovim
+        -- https://github.com/rcarriga/nvim-notify
+        notify = true,
+
+        -- surround: Surround selections, stylishly
+        -- https://github.com/kylechui/nvim-surround
+        surround = true,
+
+        -- treesitter: Nvim Treesitter configurations and abstraction layer
+        -- https://github.com/nvim-treesitter/nvim-treesitter
+        treesitter = true,
+
+        -- ufo: Folding powered by lsp, treesitter and more
+        -- https://github.com/kevinhwang91/nvim-ufo
+        ufo = true,
+
+        -- onedark: One Dark theme for Neovim
+        -- https://github.com/navarasu/onedark.nvim
+        onedark = true,
+
+        -- project: Project management for Neovim
+        -- https://github.com/ahmedkhalf/project.nvim
+        project = true,
+
+        -- rainbow: Rainbow parentheses for Neovim
+        -- https://github.com/p00f/nvim-ts-rainbow
+        rainbow = true,
+
+        -- scope: Visualize and search Treesitter scopes
+        -- https://github.com/tiagovla/scope.nvim
+        scope = true,
+
+        -- telescope: Highly extendable fuzzy finder over lists
+        -- https://github.com/nvim-telescope/telescope.nvim
+        telescope = true,
+
+        -- toggleterm: Persist and toggle multiple terminals
+        -- https://github.com/akinsho/toggleterm.nvim
+        toggleterm = true,
+
+        -- trouble: Pretty diagnostics, references, telescope results, quickfix and location list
+        -- https://github.com/folke/trouble.nvim
+        trouble = true,
+
+        -- twilight: Dim inactive portions of the code you're editing
+        -- https://github.com/folke/twilight.nvim
+        twilight = true,
+
+        -- whichkey: Displays a popup with possible keybindings of the command you started typing
+        -- https://github.com/folke/which-key.nvim
+        whichkey = true,
+
+        -- windline: Animations for Neovim's statusline
+        -- https://github.com/windwp/windline.nvim
+        windline = true,
+
+        -- zen: Distraction-free coding for Neovim
+        -- https://github.com/folke/zen-mode.nvim
+        zen = true,
+}
+
+-- add extra plugins in here
+M.plugins = {
+        {
+                "nvim-neotest/neotest",
+                dependencies = {
+                        "nvim-lua/plenary.nvim",
+                        "nvim-treesitter/nvim-treesitter",
+                        "antoinemadec/FixCursorHold.nvim",
+                },
+        },
+  { 'knsh14/vim-github-link', lazy = false },
+  { 'ctrlpvim/ctrlp.vim', lazy = false },
+  { 'tpope/vim-fugitive', lazy = false },
+  { 'editorconfig/editorconfig-vim', lazy = false },
+}
+
+M.lsp_config = {
+        clangd = {},
+}
+
+-- add extra configuration options here, like extra autocmds etc.
+-- feel free to create your own separate files and require them in here
+M.user_conf = function()
+        vim.cmd([[
+  autocmd VimEnter * lua vim.notify("Welcome to CyberNvim!", "info", {title = "Neovim"})]])
+  vim.cmd([[
+    function TabTabs()
+            set tabstop=4
+            set shiftwidth=4
+            set noexpandtab
+      let g:statText="Tabs"
+    endfunction
+    nmap <F3> mz:execute TabTabs()<CR>'z
+
+    function Tab2Spaces()
+            set tabstop=2
+            set shiftwidth=2
+            set softtabstop=2
+            set expandtab
+      let g:statText="2Spaces"
+    endfunction
+    nmap <F4> mz:execute Tab2Spaces()<CR>'z
+
+    function Tab4Spaces()
+            set tabstop=4
+            set shiftwidth=4
+            set softtabstop=4
+            set expandtab
+      let g:statText="4Spaces"
+    endfunction
+    nmap <F5> mz:execute Tab4Spaces()<CR>'z
+    function TabsOrSpaces()
+            echo g:statText
+    endfunction
+
+    execute Tab2Spaces()
+  ]])
+
+  vim.cmd("au BufNewFile,BufRead *.py execute Tab4Spaces()")
+  vim.cmd("au BufNewFile,BufRead *.go execute TabTabs()")
+  local builtin = require('telescope.builtin')
+  vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+  vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+  vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+  vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+
+end
+
+return M
+```
+
+any additional nvim plugins can be added to the section where it says `M.plugins` it's a lua table.
+like this one: `{ 'tpope/vim-fugitive', lazy = false },`
+
+just add it on a new line
+
+this is using the `lazy.nvim` plugin manager. After adding a plugin, restart nvim.
+
+Suprisingly vim is useful to use to edit the nvim config. So you can keep working on it without
+breaking anything.
+
+### Neovim tips
+
+The `<leader>` key is the spacebar by default for CyberNvim. Normally it's `\` in vim.
+The filenames show up at the top, they are actually buffers and you can navigate them with the
+`]b` and `[b` commands, as opposed to `gt` and `gT` which still work but those are for tabs, which
+are containers for buffers.
+
+Mouse is set to on, this can be turned off with `:set mouse=` and back on with `:set mouse=nvi`
